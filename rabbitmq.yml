@@ -1,0 +1,33 @@
+version: "3.4"
+services:
+  rabbitmq:
+    image: rabbitmq:3.7-management
+    deploy:
+      placement:
+        constraints: 
+          - node.labels.OS == linux
+          - node.ip == 140.0.6.184
+      labels:
+        - traefik.port=15672
+        - traefik.enable=true
+        - traefik.frontend.rule=Host:rabbit.de.autbank.net
+    container_name: rabbitmq
+    hostname: rabbitmq
+    volumes:
+      - rabbitmqdata:/var/lib/rabbitmq
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    restart: always
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    networks:
+      - web
+
+volumes:
+  rabbitmqdata:
+
+networks:
+  web: 
+    external: true
