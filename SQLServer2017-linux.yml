@@ -1,0 +1,27 @@
+version: "3.7"
+services:
+  rabbitmq:
+    image: mcr.microsoft.com/mssql/server:2017-latest
+    deploy:
+      placement:
+        constraints: 
+          - node.labels.OS == linux
+          - node.ip == 140.0.214.7
+    volumes:
+      - sqlserverdata:/var/opt/mssql
+    ports:
+      - "1433:1433"
+    restart: always
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=@Password123
+      - TZ=America/Sao_Paulo
+    networks:
+      - web
+
+volumes:
+  sqlserverdata:
+
+networks:
+  web: 
+    external: true
