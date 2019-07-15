@@ -1,0 +1,86 @@
+version: '3.7'
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.2.0
+    deploy:
+      placement:
+        constraints: 
+          - node.labels.OS == linux
+          - node.hostname == administrator
+      labels:
+        - traefik.port=9200
+        - traefik.enable=true
+    environment:
+      discovery.type: single-node
+      http.host: 0.0.0.0
+    volumes:
+      - elastichData:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+      - 9300:9300
+    networks:
+      - web
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:7.2.0
+    command: logstash -f /usr/share/logstash/config/logstash.conf
+    deploy:
+      placement:
+        constraints: 
+          - node.labels.OS == linux
+          - node.hostname == administrator
+      labels:
+        - traefik.port=5044
+        - traefik.enable=true
+        - traefik.frontend.rule=Host:logstash.de.autbank.net
+    ports:
+      - "5044:5044"
+      - "9600:9600"
+    volumes:
+        - /docker/logstash/logstash.conf:/usr/share/logstash/config/logstash.conf
+    environment:
+      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+      http.host: 0.0.0.0
+    networks:
+      - web
+    dns: 
+      - 140.0.252.1
+      - 8.8.8.8
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.2.0
+    deploy:
+      placement:
+        constraints: 
+          - node.labels.OS == linux
+          - node.hostname == administrator
+      labels:
+        - traefik.kibana.port=5601
+        - traefik.enable=true
+        - traefik.frontend.rule=Host:kibana.de.autbank.net
+    depends_on:
+        - elasticsearch
+    environment:
+      SERVER_NAME: kibana
+      ELASTICSEARCH_HOSTS: http://140.0.214.7:9200
+      ELASTICSEARCH_URL: http://140.0.214.7:9200
+      XPACK_SECURITY_ENABLED: "true"
+      #ELASTICSEARCH_USERNAME: elastic
+      #ELASTICSEARCH_PASSWD: changeme
+      XPACK_GRAPH_ENABLED: "true"
+      XPACK_WATCHER_ENABLED: "true"
+      XPACK_ML_ENABLED: "true"
+      XPACK_MONITORING_ENABLED: "true"
+      XPACK_MONITORING_UI_CONTAINER_ELASTICSEARCH_ENABLED: "true"
+    networks:
+      - web
+    ports:
+      - 5601:5601
+
+volumes:
+  elastichData:
+  logstash_pipeline:
+
+networks:
+  web: 
+    external: true
