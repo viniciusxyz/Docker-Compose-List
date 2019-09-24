@@ -16,11 +16,6 @@ services:
   kafka1:
     image: confluentinc/cp-kafka:5.3.0
     hostname: kafka1
-#    ports:
-#    - target: 9092
-#      published: 9092
-#      protocol: tcp
-#      mode: host
     ports:
       - "9092:9092"
       - "1099:1099"

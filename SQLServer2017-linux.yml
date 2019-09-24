@@ -1,16 +1,12 @@
 version: "3.7"
 services:
+
   sql-server:
     image: mcr.microsoft.com/mssql/server:2017-latest
-    deploy:
-      placement:
-        constraints: 
-          - node.labels.OS == linux
-          - node.ip == 140.0.6.205
     volumes:
       - sqlserverdata:/var/opt/mssql
     ports:
-      - "1450:1433"
+      - "1433:1433"
     environment:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=@Password123
@@ -20,7 +16,3 @@ services:
 
 volumes:
   sqlserverdata:
-
-networks:
-  web: 
-    external: true
