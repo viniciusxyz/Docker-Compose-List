@@ -25,8 +25,31 @@ filebeat.inputs:
 
   # Paths that should be crawled and fetched. Glob based paths.
   paths:
-    - c:\Users\Vinicius\Desktop\Logs\LogsAutk7.log
+    #- c:\Users\Vinicius\Desktop\Logs\LogsAutk7.log
+    - C:\Users\vinic\Desktop\Projetos\conta-ms\logs\app.log
     #- c:\programdata\elasticsearch\logs\*
+
+      ### JSON configuration
+
+  document_type: json
+
+  json.keys_under_root: true
+  json.add_error_key: true
+
+  json.message_key: log
+#
+#
+#  json.keys_under_root: true
+#
+#  json.overwrite_keys: true
+#
+#  #json.add_error_key: false
+#
+#  multiline.pattern: '^{'
+#
+#  multiline.negate: true
+#
+#  multiline.match: after
 
   # Exclude lines. A list of regular expressions to match. It drops the lines that are
   # matching any regular expression from the list.
@@ -70,7 +93,7 @@ filebeat.config.modules:
   path: ${path.config}/modules.d/*.yml
 
   # Set to true to enable config reloading
-  reload.enabled: false
+  reload.enabled: true
 
   # Period on which files under path should be checked for changes
   #reload.period: 10s
@@ -157,7 +180,7 @@ setup.kibana:
 #----------------------------- Logstash output --------------------------------
 output.logstash:
   # The Logstash hosts
-  hosts: ["140.0.214.7:5044"]
+  hosts: ["localhost:5044"]
 
   # Optional SSL. By default is off.
   # List of root certificates for HTTPS server verifications
