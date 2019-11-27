@@ -16,3 +16,7 @@ services:
 
 volumes:
   sqlserverdata:
+
+networks:
+  web:
+    external: true
