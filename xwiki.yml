@@ -2,11 +2,6 @@ version: '3.7'
 services:
   db:
     image: mysql:5.7
-    deploy:
-      placement:
-        constraints:
-          - node.labels.OS == linux
-          - node.ip == 140.0.6.184
     volumes:
       - xwiki-cnf:/etc/mysql/conf.d/xwiki.cnf
       - mysql-data:/var/lib/mysql
