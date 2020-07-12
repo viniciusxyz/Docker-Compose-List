@@ -15,8 +15,6 @@ services:
     ports:
       - 9400:9200
       - 9700:9600 # required for Performance Analyzer
-    networks:
-      - odfe-net
 
   kibana_opendistro:
     image: amazon/opendistro-for-elasticsearch-kibana:1.3.0
@@ -25,12 +23,7 @@ services:
     environment:
       ELASTICSEARCH_URL: http://elastic_opendistro:9200
       ELASTICSEARCH_HOSTS: http://elastic_opendistro:9200
-    networks:
-      - odfe-net
 
 volumes:
   elastic_opendistro:
   kibana_opendistro:
-
-networks:
-  odfe-net:

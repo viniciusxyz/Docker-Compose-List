@@ -41,8 +41,6 @@ services:
       - 12201:12201
       # GELF UDP
       - 12201:12201/udp
-
-
 volumes:
   elastichDataGrayLog:
   mongodb:

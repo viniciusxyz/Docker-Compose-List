@@ -11,9 +11,12 @@ services:
       - VAULT_ADDRESS=http://0.0.0.0:8200
       - SKIP_SETCAP= 1
     volumes:
-      - ./volumes/logs:/vault/logs
-      - ./volumes/file:/vault/file
+      - vault-logs:/vault/logs
+      - vault-files:/vault/file
       - ./volumes/config:/vault/config
     cap_add:
       - IPC_LOCK
     entrypoint: vault server -config=/vault/config/vault.json
+volumes:
+  vault-logs:
+  vault-files:

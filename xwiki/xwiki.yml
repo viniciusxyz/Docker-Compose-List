@@ -10,8 +10,6 @@ services:
       - MYSQL_USER=xwiki
       - MYSQL_PASSWORD=xwiki
       - MYSQL_DATABASE=xwiki
-    networks:
-      - web
     ports:
       - 3306:3306
 
@@ -36,14 +34,8 @@ services:
       - DB_HOST=140.0.6.184:3306
     volumes:
       - xwiki-data:/usr/local/xwiki
-    networks:
-      - web
 
 volumes:
   mysql-data: {}
   xwiki-data: {}
   xwiki-cnf: {}
-
-networks:
-  web:
-    external: true

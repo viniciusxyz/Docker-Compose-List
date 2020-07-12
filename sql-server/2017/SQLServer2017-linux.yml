@@ -11,12 +11,6 @@ services:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=@Password123
       - TZ=America/Sao_Paulo
-    networks:
-      - web
 
 volumes:
   sqlserverdata:
-
-networks:
-  web:
-    external: true
