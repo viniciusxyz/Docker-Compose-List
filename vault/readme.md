@@ -1,6 +1,10 @@
-## vault operator init
- - Get Unseal Keys
- - Get Root Key
+## How to
 
- ## Vault operator
-  - Set 3 unseals keys
+#### Commands:
+
+**vault operator init**
+ - _Get Unseal Keys_
+ - _Get Root Key_
+
+**vault operator**
+  - _Set 3 unseals keys_
