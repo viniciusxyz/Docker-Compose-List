@@ -8,7 +8,7 @@
 
 [Open Distro](./opendistro)
 
-[Prometheus + Grafana](./prometheus-grafana)
+[Prometheus + Grafana + AlertManager](./prometheus-grafana-alertmanager)
 
 [Rabbit MQ](./rabbitmq)
 

@@ -1,0 +1,29 @@
+global:
+  resolve_timeout: 1m
+  slack_api_url: 'http://123.456.789.12/hooks/456456564564dsdasdas'
+  smtp_auth_username: vinicius.santos@xxxxxxxx
+  smtp_auth_password: JKdsd
+route:
+  receiver: email_receiver
+  group_by: ['alertname']
+  group_wait: 15s
+  group_interval: 15s
+  repeat_interval: 30m
+  routes:
+  - receiver: rocketchat
+    continue: true
+  - receiver: email_receiver
+    continue: true
+receivers:
+- name: rocketchat
+  slack_configs:
+  - channel: '@Vinicius'
+    send_resolved: true
+    text: "Alerta enviado, por favor verifique o estado da sua operação para mitigar a falha"
+- name: 'email_receiver'
+  email_configs:
+  - send_resolved: true
+    to: vinicius.santos@xxxxxxxx
+    from: vinicius.santos@xxxxxxxx
+    smarthost: smtp.xxxxxxxx:587
+    require_tls: false

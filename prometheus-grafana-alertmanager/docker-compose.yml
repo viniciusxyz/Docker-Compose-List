@@ -1,0 +1,35 @@
+version: '3.7'
+services:
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - 9090:9090
+    environment:
+      - TZ=America/Bahia
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/alert.rules.yaml:/etc/prometheus/alert.rules
+
+  grafana-ui:
+    image: grafana/grafana
+    ports:
+      - 3000:3000
+    environment:
+      - TZ=America/Bahia
+      - GF_SECURITY_ADMIN_PASSWORD=password
+    volumes:
+      - grafana-vol:/var/lib/grafana
+
+  alertmanager:
+    image: prom/alertmanager
+    command:
+     - --log.level=debug
+     - --config.file=/etc/alertmanager/alertmanager.yml
+    environment:
+      - TZ=America/Bahia
+    volumes:
+      - ./alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
+    ports:
+      - 9093:9093
+volumes:
+  grafana-vol:
