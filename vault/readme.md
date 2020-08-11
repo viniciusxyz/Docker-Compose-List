@@ -6,5 +6,5 @@
  - _Get Unseal Keys_
  - _Get Root Key_
 
-**vault operator**
+**vault operator unseal**
   - _Set 3 unseals keys_
