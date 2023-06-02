@@ -1,7 +1,7 @@
 version: '3.7'
 services:
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.5.1
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.3
     environment:
       discovery.type: single-node
       http.host: 0.0.0.0
@@ -12,7 +12,7 @@ services:
       - 9300:9300
 
   kibana:
-    image: docker.elastic.co/kibana/kibana:7.5.1
+    image: docker.elastic.co/kibana/kibana:7.17.3
     deploy:
     depends_on:
         - elasticsearch
@@ -28,6 +28,27 @@ services:
       XPACK_MONITORING_UI_CONTAINER_ELASTICSEARCH_ENABLED: "true"
     ports:
       - 5601:5601
+
+  apm-server:
+    image: docker.elastic.co/apm/apm-server:7.17.3
+    ports:
+      - '8200:8200'
+      - '1514:1514/udp'
+    environment:
+      - output.elasticsearch.hosts=[elasticsearch:9200]
+      - apm-server.host=apm-server:8200
+      - apm-server.frontend.enabled=true
+      - apm-server.frontend.allow_origins="*"
+      - output.elasticsearch.enabled=true
+      - output.elasticsearch.hosts=["elasticsearch"]
+
+  opentelemetry-collector-contrib:
+    image: otel/opentelemetry-collector-contrib:0.78.0
+    ports:
+      - '4317:4317'
+      - '4318:4318'
+    volumes:
+      - ./config/otel-collector-config.yml:/etc/otelcol-contrib/config.yaml
 
 volumes:
   elastichData:
