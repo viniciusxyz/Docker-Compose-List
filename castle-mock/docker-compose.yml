@@ -1,0 +1,11 @@
+version: "3.7"
+services:
+
+  castle-mock:
+    image: castlemock/castlemock
+    volumes:
+      - castlemock_data:/root/.castlemock
+    ports:
+      - "8585:8080"
+volumes:
+  castlemock_data:
