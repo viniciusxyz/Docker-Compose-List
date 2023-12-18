@@ -23,7 +23,7 @@ services:
       labels:
         - traefik.port=8080
         - traefik.enable=true
-        - traefik.frontend.rule=Host:xwiki.de.autbank.net
+        - traefik.frontend.rule=Host:xwiki.test.net
     depends_on:
       - db
     ports:

@@ -12,7 +12,7 @@
 
 [Rabbit MQ](./rabbitmq)
 
-[SQL Server 2017](./sql-server/2017)
+[SQL Server 2019](./sql-server/2019)
 
 [Vault](./vault)
 
