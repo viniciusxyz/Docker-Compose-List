@@ -1,0 +1,38 @@
+extensions: 
+  health_check:
+receivers:
+  otlp:
+    protocols:
+      http:
+        endpoint: 0.0.0.0:4318
+        cors:
+          allowed_origins:
+            - "*"
+          allowed_headers:
+            - "*"
+          max_age: 7200
+      grpc:
+        endpoint: 0.0.0.0:4317
+exporters:
+  otlp/data-prepper:
+    endpoint: data-prepper:21890
+    tls:
+      insecure: true
+  otlp/data-prepper-metric:
+    endpoint: data-prepper:21891
+    tls:
+      insecure: true
+  logging:
+processors:
+  batch:
+service:
+  extensions: [health_check]
+  pipelines:
+    traces:
+      receivers: [otlp]
+      exporters: [otlp/data-prepper]
+      processors: [batch]
+    metrics:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [otlp/data-prepper-metric]
