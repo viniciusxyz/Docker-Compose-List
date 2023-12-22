@@ -1,10 +1,22 @@
+# docker stack deploy --compose-file docker-compose.yml redis
+
 version: '3.7'
 services:
   redis:
-    image: redis:6.0.6
+    image: redis:7.2-alpine
     command: ["redis-server", "--appendonly", "yes","--requirepass","Redis2019!"]
     ports:
-    - "6379:6379"
+      - "6379:6379"
+    networks:
+      - redis-net
+    deploy:
+        resources:
+            reservations:
+              cpus: "0.1"
+              memory: 64M
+            limits:
+              cpus: "0.5"
+              memory: 1024M
   redis-commander:
     image: rediscommander/redis-commander:latest
     environment:
@@ -14,3 +26,9 @@ services:
       - 8081:8081
     depends_on:
       - redis
+    networks:
+      - redis-net
+
+networks: 
+  redis-net:
+    driver: overlay  
