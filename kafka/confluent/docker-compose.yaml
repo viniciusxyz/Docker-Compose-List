@@ -29,6 +29,28 @@ services:
       KAFKA_DEFAULT_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
 
+  schema-registry:
+    image: confluentinc/cp-schema-registry:latest
+    hostname: schema-registry
+    depends_on:
+      - kafka
+    ports:
+      - "8081:8081"
+    volumes:
+      - ./conf:/conf
+    environment:
+      SCHEMA_REGISTRY_HOST_NAME: schema-registry
+      SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: 'zookeeper:2181'
+      SCHEMA_REGISTRY_LISTENERS: http://schema-registry:8081
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: PLAINTEXT://kafka:29092,PLAINTEXT_INTERNAL://localhost:9092
+      SCHEMA_REGISTRY_DEBUG: 'true'
+      SCHEMA_REGISTRY_AUTHENTICATION_METHOD: BASIC
+      SCHEMA_REGISTRY_AUTHENTICATION_ROLES: admin,developer,user,sr-user
+      SCHEMA_REGISTRY_AUTHENTICATION_REALM: SchemaRegistry-Props
+      SCHEMA_REGISTRY_OPTS: -Djava.security.auth.login.config=/conf/schema-registry.jaas
+    networks: 
+      - broker-kafka
+
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
     networks: 
@@ -40,6 +62,7 @@ services:
     environment:
       KAFKA_CLUSTERS_0_NAME: kafka dev
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092
+      #KAFKA_CLUSTERS_0_SCHEMAREGISTRY: http://schema-registry:8081
 
 networks: 
   broker-kafka:
