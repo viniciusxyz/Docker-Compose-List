@@ -1,27 +1,29 @@
 version: '3.7'
 services:
   prometheus:
-    image: prom/prometheus
+    image: prom/prometheus:v2.37.0
     ports:
-      - 9090:9090
+      - 9595:9090
     environment:
       - TZ=America/Bahia
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-      - ./prometheus/alert.rules.yaml:/etc/prometheus/alert.rules
+      - ./prometheus/rules:/etc/prometheus/rules
 
   grafana-ui:
-    image: grafana/grafana
+    image: grafana/grafana:9.0.5
     ports:
       - 3000:3000
     environment:
       - TZ=America/Bahia
       - GF_SECURITY_ADMIN_PASSWORD=password
     volumes:
-      - grafana-vol:/var/lib/grafana
+      - ./grafana:/etc/grafana/provisioning/datasources
+      - ./grafana/dashboard.yaml:/etc/grafana/provisioning/dashboards/main.yaml
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
 
   alertmanager:
-    image: prom/alertmanager
+    image: prom/alertmanager:v0.24.0
     command:
      - --log.level=debug
      - --config.file=/etc/alertmanager/alertmanager.yml
@@ -31,5 +33,15 @@ services:
       - ./alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
     ports:
       - 9093:9093
-volumes:
-  grafana-vol:
+
+  cadvisor:
+    container_name: cadvisor
+    image: gcr.io/cadvisor/cadvisor:latest
+    ports:
+      - "8686:8080"
+    volumes: 
+      - "/:/rootfs"
+      - "/var/run:/var/run"
+      - "/sys:/sys"
+      - "/var/lib/docker/:/var/lib/docker"
+    privileged: true
